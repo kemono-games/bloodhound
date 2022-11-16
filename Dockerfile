@@ -19,6 +19,7 @@ WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
+COPY package.json yarn.lock* tsconfig.json ./
 
 ENV NODE_ENV production
 
