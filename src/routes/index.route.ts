@@ -7,7 +7,7 @@ import { sortDecoder } from '@/lib/search'
 
 const router = Router()
 
-router.all('/searchGame', async (req, res) => {
+router.all('/searchGames', async (req, res) => {
   const task = pipe(
     pipe(
       D.struct({
