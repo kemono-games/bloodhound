@@ -19,3 +19,5 @@ services:
       - ORIGIN = *
       - CREDENTIALS = true
       - ELASTIC_SEARCH_ENDPOINT=http://10.0.0.101:9200/
+    volumes:
+      - ./logs:/app/logs

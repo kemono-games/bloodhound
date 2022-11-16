@@ -1,24 +1,29 @@
-# Common build stage
-FROM node:18 as common-build-stage
-
-COPY . ./app
-
+# Install dependencies only when needed
+FROM node:18-alpine AS deps
+RUN apk add --no-cache libc6-compat python3 make g++ bash 
 WORKDIR /app
 
-RUN npm install
+COPY package.json yarn.lock* ./
+RUN yarn --frozen-lockfile
 
-EXPOSE 3000
+FROM node:18-alpine AS builder
+WORKDIR /app
 
-# Development build stage
-FROM common-build-stage as development-build-stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY . ./
 
-ENV NODE_ENV development
+RUN yarn build
 
-CMD ["npm", "run", "dev"]
+FROM node:18-alpine AS runner
+WORKDIR /app
 
-# Production build stage
-FROM common-build-stage as production-build-stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
 
 ENV NODE_ENV production
 
-CMD ["npm", "run", "start"]
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["yarn", "start"]
