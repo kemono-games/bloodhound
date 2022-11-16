@@ -15,7 +15,7 @@ jobs:
       - name: Build
         run: |
           GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
-          docker build -t kregistry.ap-northeast-1.aliyuncs.com/kemono/bloodhound:${GIT_HASH} .
+          docker build -t registry.ap-northeast-1.aliyuncs.com/kemono/bloodhound:${GIT_HASH} .
 
   push:
     needs: [build]
