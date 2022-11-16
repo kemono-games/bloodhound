@@ -5,11 +5,11 @@ import helmet from 'helmet'
 import hpp from 'hpp'
 import morgan from 'morgan'
 
-import { CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT } from '@config'
-import errorMiddleware from '@middlewares/error.middleware'
-import indexRoute from '@routes/index.route'
-import { logger, stream } from '@utils/logger'
-import validateEnv from '@utils/validateEnv'
+import { CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT } from '@/config'
+import errorMiddleware from '@/middlewares/error.middleware'
+import indexRoute from '@/routes/index.route'
+import { logger, stream } from '@/utils/logger'
+import validateEnv from '@/utils/validateEnv'
 
 validateEnv()
 
@@ -25,7 +25,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.use('/', indexRoute)
+app.use('/api', indexRoute)
 
 app.use(errorMiddleware)
 
