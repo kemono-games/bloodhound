@@ -7,7 +7,7 @@ import { sortDecoder } from '@/lib/search'
 
 const router = Router()
 
-router.get('/searchGame', async (req, res) => {
+router.all('/searchGame', async (req, res) => {
   const task = pipe(
     pipe(
       D.struct({
@@ -31,7 +31,7 @@ router.get('/searchGame', async (req, res) => {
   res.status(200).json(await task())
 })
 
-router.get('/getSimilar', async (req, res) => {
+router.all('/getSimilar', async (req, res) => {
   const task = pipe(
     D.struct({
       tags: D.array(D.string),
@@ -43,7 +43,7 @@ router.get('/getSimilar', async (req, res) => {
   res.status(200).json(await task())
 })
 
-router.get('/getRandom', async (req, res) => {
+router.all('/getRandom', async (req, res) => {
   const task = pipe(es.game.getRandom(es.client))
   res.status(200).json(await task())
 })
