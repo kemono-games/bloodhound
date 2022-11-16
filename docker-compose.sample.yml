@@ -14,10 +14,10 @@ services:
       - 'host.docker.internal:host-gateway'
     environment:
       - PORT=3000
-      - LOG_FORMAT = combined
-      - LOG_DIR = ../logs
-      - ORIGIN = *
-      - CREDENTIALS = true
+      - LOG_FORMAT=combined
+      - LOG_DIR=../logs
+      - ORIGIN=*
+      - CREDENTIALS=true
       - ELASTIC_SEARCH_ENDPOINT=http://host.docker.internal:9200/
     volumes:
       - ./logs:/app/logs
