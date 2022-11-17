@@ -41,6 +41,12 @@ jobs:
           cd /home/ubuntu/kemono-games-search
           sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" docker-compose.yml
           docker-compose up -d
+
+  deploy-cn:
+    needs: [push]
+    runs-on: [self-hosted, home]
+    steps:
+      - uses: actions/checkout@v3
       - name: Deploy CN
         run: |
           GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
