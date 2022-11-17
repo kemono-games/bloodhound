@@ -50,7 +50,7 @@ jobs:
       - name: Deploy CN
         run: |
           GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
-          scp docker-compose.sample.yml /tmp/docker-compose.yml
+          scp docker-compose.cn.sample.yml /tmp/docker-compose.yml
           sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" /tmp/docker-compose.yml
           scp /tmp/docker-compose.yml web02:/root/kemono-games-search/
           ssh web02 "cd /root/kemono-games-search && docker compose up -d"
