@@ -2,7 +2,7 @@ version: '3'
 
 services:
   kemono-games-search:
-    image: registry.cn-guangzhou.aliyuncs.com/kemono/bloodhound:{{GIT-SHA}}
+    image: registry-vpc.cn-guangzhou.aliyuncs.com/kemono/bloodhound:{{GIT-SHA}}
     restart: always
     deploy:
       resources:
