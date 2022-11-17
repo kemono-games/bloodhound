@@ -25,6 +25,7 @@ jobs:
         run: |
           GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
           docker push registry.ap-northeast-1.aliyuncs.com/kemono/bloodhound:${GIT_HASH}
+          docker tag registry.ap-northeast-1.aliyuncs.com/kemono/bloodhound:${GIT_HASH} registry.cn-guangzhou.aliyuncs.com/kemono/bloodhound:${GIT_HASH}
           docker push registry.cn-guangzhou.aliyuncs.com/kemono/bloodhound:${GIT_HASH}
 
   deploy:
