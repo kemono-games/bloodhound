@@ -25,6 +25,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
+app.use('/health', (_, res) => res.send('OK'))
 app.use('/api', indexRoute)
 
 app.use(errorMiddleware)
