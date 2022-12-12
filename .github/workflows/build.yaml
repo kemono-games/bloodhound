@@ -43,7 +43,7 @@ jobs:
           SERVER=("web01" "web02" "db")
           parallel ssh {}.jp.internal.abo.network "mkdir -p /root/kemono-games-search" ::: ${SERVER[@]}
           parallel scp /tmp/kemono-games-search-global/docker-compose.yml {}.jp.internal.abo.network:/root/kemono-games-search/ ::: ${SERVER[@]}
-          parallel ssh {}.jp.internal.abo.network "cd /root/kemono-games-search && docker compose up -d" ::: ${SERVER[@]}
+          parallel "ssh {}.jp.internal.abo.network 'cd /root/kemono-games-search && docker compose up -d'" ::: ${SERVER[@]}
 
   deploy-cn:
     needs: [push]
