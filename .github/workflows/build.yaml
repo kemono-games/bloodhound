@@ -39,13 +39,11 @@ jobs:
           mkdir -p /tmp/kemono-games-search-global
           cp docker-compose.sample.yml /tmp/kemono-games-search-global/docker-compose.yml
           sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" /tmp/kemono-games-search-global/docker-compose.yml
-
-          ssh web01.jp.internal.abo.network "mkdir -p /root/kemono-games-search"
-          ssh web02.jp.internal.abo.network "mkdir -p /root/kemono-games-search"
-          scp /tmp/kemono-games-search-global/docker-compose.yml web01.jp.internal.abo.network:/root/kemono-games-search/
-          ssh web01.jp.internal.abo.network "cd /root/kemono-games-search && docker compose up -d"
-          scp /tmp/kemono-games-search-global/docker-compose.yml web02.jp.internal.abo.network:/root/kemono-games-search/
-          ssh web02.jp.internal.abo.network "cd /root/kemono-games-search && docker compose up -d"
+          
+          SERVER=("web01" "web02" "db")
+          parallel ssh {}.jp.internal.abo.network "mkdir -p /root/kemono-games-search" ::: ${SERVER[@]}
+          parallel scp /tmp/kemono-games-search-global/docker-compose.yml {}.jp.internal.abo.network:/root/kemono-games-search/ ::: ${SERVER[@]}
+          parallel ssh {}.jp.internal.abo.network "cd /root/kemono-games-search && docker compose up -d" ::: ${SERVER[@]}
 
   deploy-cn:
     needs: [push]
