@@ -37,9 +37,9 @@ jobs:
           scp docker-compose.sample.yml /tmp/docker-compose.yml
           sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" /tmp/docker-compose.yml
 
-          ssh web01-jp "mkdir -p /root/kemono-games-search"
-          ssh web02-jp "mkdir -p /root/kemono-games-search"
-          scp /tmp/docker-compose.yml web01-jp:/root/kemono-games-search/
-          ssh web01-jp "cd /root/kemono-games-search && docker compose up -d"
-          scp /tmp/docker-compose.yml web02-jp:/root/kemono-games-search/
-          ssh web02-jp "cd /root/kemono-games-search && docker compose up -d"
+          ssh web01.jp.internal.abo.network "mkdir -p /root/kemono-games-search"
+          ssh web02.jp.internal.abo.network "mkdir -p /root/kemono-games-search"
+          scp /tmp/docker-compose.yml web01.jp.internal.abo.network:/root/kemono-games-search/
+          ssh web01.jp.internal.abo.network "cd /root/kemono-games-search && docker compose up -d"
+          scp /tmp/docker-compose.yml web02.jp.internal.abo.network:/root/kemono-games-search/
+          ssh web02.jp.internal.abo.network "cd /root/kemono-games-search && docker compose up -d"
