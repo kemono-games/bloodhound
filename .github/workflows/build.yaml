@@ -25,8 +25,6 @@ jobs:
         run: |
           GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
           docker push registry.ap-northeast-1.aliyuncs.com/kemono/bloodhound:${GIT_HASH}
-          docker tag registry.ap-northeast-1.aliyuncs.com/kemono/bloodhound:${GIT_HASH} registry.cn-guangzhou.aliyuncs.com/kemono/bloodhound:${GIT_HASH}
-          docker push registry.cn-guangzhou.aliyuncs.com/kemono/bloodhound:${GIT_HASH}
 
   deploy:
     needs: [push]
@@ -36,21 +34,12 @@ jobs:
       - name: Deploy Global
         run: |
           GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
-          mkdir -p /home/ubuntu/kemono-games-search
-          cp docker-compose.sample.yml /home/ubuntu/kemono-games-search/docker-compose.yml
-          cd /home/ubuntu/kemono-games-search
-          sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" docker-compose.yml
-          docker-compose up -d
-
-  deploy-cn:
-    needs: [push]
-    runs-on: [self-hosted, home]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy CN
-        run: |
-          GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
-          scp docker-compose.cn.sample.yml /tmp/docker-compose.yml
+          scp docker-compose.sample.yml /tmp/docker-compose.yml
           sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" /tmp/docker-compose.yml
-          scp /tmp/docker-compose.yml web02:/root/kemono-games-search/
-          ssh web02 "cd /root/kemono-games-search && docker compose up -d"
+
+          ssh web01-jp "mkdir -p /root/kemono-games-search"
+          ssh web02-jp "mkdir -p /root/kemono-games-search"
+          scp /tmp/docker-compose.yml web01-jp:/root/kemono-games-search/
+          ssh web01-jp "cd /root/kemono-games-search && docker compose up -d"
+          scp /tmp/docker-compose.yml web02-jp:/root/kemono-games-search/
+          ssh web02-jp "cd /root/kemono-games-search && docker compose up -d"
