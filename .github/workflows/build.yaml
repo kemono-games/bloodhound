@@ -34,12 +34,26 @@ jobs:
       - name: Deploy Global
         run: |
           GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
-          scp docker-compose.sample.yml /tmp/docker-compose.yml
-          sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" /tmp/docker-compose.yml
+          mkdir -p /tmp/kemono-games-search-global
+          cp docker-compose.sample.yml /tmp/kemono-games-search-global/docker-compose.yml
+          sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" /tmp/kemono-games-search-global/docker-compose.yml
 
           ssh web01.jp.internal.abo.network "mkdir -p /root/kemono-games-search"
           ssh web02.jp.internal.abo.network "mkdir -p /root/kemono-games-search"
-          scp /tmp/docker-compose.yml web01.jp.internal.abo.network:/root/kemono-games-search/
+          scp /tmp/kemono-games-search-global/docker-compose.yml web01.jp.internal.abo.network:/root/kemono-games-search/
           ssh web01.jp.internal.abo.network "cd /root/kemono-games-search && docker compose up -d"
-          scp /tmp/docker-compose.yml web02.jp.internal.abo.network:/root/kemono-games-search/
+          scp /tmp/kemono-games-search-global/docker-compose.yml web02.jp.internal.abo.network:/root/kemono-games-search/
           ssh web02.jp.internal.abo.network "cd /root/kemono-games-search && docker compose up -d"
+
+  deploy-cn:
+    needs: [push]
+    runs-on: [self-hosted, home]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy CN
+        run: |
+          GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
+          cp docker-compose.cn.sample.yml /tmp/docker-compose.yml
+          sed -i "s/{{GIT-SHA}}/${GIT_HASH}/g" /tmp/docker-compose.yml
+          scp /tmp/docker-compose.yml web02.internal.abo.network:/root/kemono-games-search/
+          ssh web02.internal.abo.network "cd /root/kemono-games-search && docker compose up -d"
