@@ -5,10 +5,7 @@ import * as utils from './utils'
 
 const INDEX = 'kemono-games'
 
-export const sortDecoder = D.union(
-  D.literal('latest_update'),
-  D.literal('popular'),
-)
+export const sortDecoder = D.union(D.literal('latest_update'), D.literal('popular'))
 export type Sort = D.TypeOf<typeof sortDecoder>
 
 const getBoost = (tag: string, isYiff: boolean) => {
@@ -40,7 +37,7 @@ const getBoost = (tag: string, isYiff: boolean) => {
     case 'species':
       return 4
     case 'lang':
-      return 5
+      return 10
     case 'misc':
       return 2
     case 'platform':
@@ -138,15 +135,14 @@ export type SearchGamePayloadEs = {
   strict: boolean
 }
 export const search = (client: Client, payload: SearchGamePayloadEs) => {
-  const { authorSlug, includeTags, excludeTags, order, offset, limit, strict } =
-    {
-      includeTags: [],
-      excludeTags: [],
-      order: 'popular',
-      limit: 50,
-      offset: 0,
-      ...payload,
-    }
+  const { authorSlug, includeTags, excludeTags, order, offset, limit, strict } = {
+    includeTags: [],
+    excludeTags: [],
+    order: 'popular',
+    limit: 50,
+    offset: 0,
+    ...payload,
+  }
 
   const namespaces: { [key: string]: string[] } = {}
   includeTags.forEach((tag) => {
