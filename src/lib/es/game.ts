@@ -133,9 +133,10 @@ export type SearchGamePayloadEs = {
   limit?: number
   offset?: number
   strict: boolean
+  locale: 'zh-Hans' | 'zh-Hant' | 'ja' | 'en'
 }
 export const search = (client: Client, payload: SearchGamePayloadEs) => {
-  const { authorSlug, includeTags, excludeTags, order, offset, limit, strict } = {
+  const { authorSlug, includeTags, excludeTags, order, offset, limit, strict, locale } = {
     includeTags: [],
     excludeTags: [],
     order: 'popular',
@@ -143,6 +144,7 @@ export const search = (client: Client, payload: SearchGamePayloadEs) => {
     offset: 0,
     ...payload,
   }
+  const sortKey = ['zh-Hans', 'zh-Hant', 'ja'].includes(locale) ? 'hot' : 'hotEn'
 
   const namespaces: { [key: string]: string[] } = {}
   includeTags.forEach((tag) => {
@@ -214,14 +216,14 @@ export const search = (client: Client, payload: SearchGamePayloadEs) => {
                   },
                 },
                 {
-                  hot: {
+                  [sortKey]: {
                     order: 'desc',
                   },
                 },
               ]
             : [
                 {
-                  hot: {
+                  [sortKey]: {
                     order: 'desc',
                   },
                 },

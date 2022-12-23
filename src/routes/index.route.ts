@@ -7,11 +7,13 @@ import { sortDecoder } from '@/lib/search'
 
 const router = Router()
 
+export const localeDecoder = D.union(D.literal('en'), D.literal('zh-Hans'), D.literal('zh-Hant'), D.literal('ja'))
 router.all('/searchGames', async (req, res) => {
   const task = pipe(
     pipe(
       D.struct({
         strict: D.boolean,
+        locale: localeDecoder,
       }),
       D.intersect(
         D.partial({
